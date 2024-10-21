@@ -4,8 +4,8 @@ from django.db import models
 # Create your models here.
 
 class Customer(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
     is_admin = models.BooleanField(default=True)
@@ -14,16 +14,7 @@ class Customer(models.Model):
         return self.name
 
 
-class Phone(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='phones')
-    phone_number = models.CharField(max_length=15)
-
-    def __str__(self):
-        return self.phone_number
-
-
 class BankAccount(models.Model):
-    id = models.AutoField(primary_key=True)
     iban = models.CharField(max_length=34, unique=True)
     swift_code = models.CharField(max_length=11)
     account_name = models.CharField(max_length=100)
@@ -34,7 +25,6 @@ class BankAccount(models.Model):
 
 
 class Category(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -42,7 +32,6 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
@@ -71,7 +60,6 @@ class CartItem(models.Model):
 
 
 class Order(models.Model):
-    id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
@@ -102,7 +90,6 @@ class OrderItem(models.Model):
 
 
 class Payment(models.Model):
-    id = models.AutoField(primary_key=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
@@ -123,7 +110,6 @@ class Payment(models.Model):
 
 
 class Review(models.Model):
-    id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='reviews')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     rating = models.PositiveIntegerField()  # Assuming a rating out of 5
